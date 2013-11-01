@@ -1,4 +1,4 @@
-class GrailsBugsnagPluginGrailsPlugin {
+class BugsnagGrailsPlugin {
     // the plugin version
     def version = "0.1"
     // the version or versions of Grails the plugin is designed for
@@ -11,11 +11,11 @@ class GrailsBugsnagPluginGrailsPlugin {
     ]
 
     // TODO Fill in these fields
-    def title = "Grails Bugsnag Plugin Plugin" // Headline display name of the plugin
-    def author = "Your name"
-    def authorEmail = ""
+    def title = "Grails Bugsnag Plugin" // Headline display name of the plugin
+    def author = "Ben Lucchesi"
+    def authorEmail = "benlucchesi@gmail.com"
     def description = '''\
-Brief summary/description of the plugin.
+      Integrates bugsnag into your grails application.
 '''
 
     // URL to the plugin's documentation
@@ -44,6 +44,16 @@ Brief summary/description of the plugin.
 
     def doWithSpring = {
         // TODO Implement runtime spring config (optional)
+
+        println "in doWithSpring!!!!!!!!!!"
+        if ( !application.config.grails.plugin.bugsnag.enabled ) 
+            return
+
+        println "adding exceptino handler"
+        exceptionHandler(com.granicus.grails.plugins.bugsnag.BugsnagExceptionResolver){
+          exceptionMappings = ['java.lang.Exception': '/error']
+          bugsnagService = ref('com.granicus.grails.plugins.bugsnag.BugsnagService')
+        }
     }
 
     def doWithDynamicMethods = { ctx ->
