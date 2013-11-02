@@ -34,7 +34,7 @@ class BugsnagGrailsPlugin {
     def author = "Ben Lucchesi"
     def authorEmail = "benlucchesi@gmail.com"
     def description = '''\
-      Integrates the bugsnag error reporting service client into your grails application and automatically reports exceptions to the bugsnag service.
+      Integrates the bugsnag error reporting client into your grails application and automatically reports exceptions to the bugsnag service.
 '''
 
     def loadAfter = ['controllers']
