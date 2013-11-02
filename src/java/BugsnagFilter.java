@@ -1,3 +1,6 @@
+/*
+NOTE: not currently implement. will consider implementing a file to catch 404's and other error types not caught in user-code
+
 package com.granicus.grails.plugins.bugsnag;
 
 import javax.servlet.FilterChain;
@@ -50,3 +53,4 @@ public class BugsnagFilter extends OncePerRequestFilter implements InitializingB
     }
 
 }
+*/
