@@ -2,11 +2,11 @@
 
 Current Version: 0.1
 
-The bugsnag grails plugin integrates the bugsnag reporting client into your grails applications and automatically reports errors to the bugsnag service (www.bugsnag.com). Information reported by the client includes a dump of the original request (headers, cookies, query, original URL, grails environment, etc), information about the currently logged in user, and a stacktrace of the error that occurred.
+The bugsnag Grails plugin integrates the bugsnag reporting client into your Grails applications and automatically reports errors to the bugsnag service (www.bugsnag.com). Information reported by the client includes a dump of the original request (headers, cookies, query, original URL, Grails environment, etc), information about the currently logged in user, and a stacktrace of the error that occurred.
 
 # Installation
 
-compile ":cookie-session:0.1"
+compile ":bugsnag:0.1"
 
 # Usage
 
@@ -18,8 +18,8 @@ To use the bugsnagService, add it to your services or controllers as follows:
 
 Bugsnag service has two methods:
 
-    def getConfiguredClient(def context) : return a configured bugsnag client (https://bugsnag.com/docs/notifiers/java)
-    def notify(def request, def exception) : send a notification to bugsnag, passing in the current request 
+    def getConfiguredClient(context) : return a configured bugsnag client (https://bugsnag.com/docs/notifiers/java)
+    def notify(request, exception) : send a notification to bugsnag, passing in the current request
 
 # Configuration
 
