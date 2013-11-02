@@ -55,7 +55,7 @@ class BugsnagService {
       return client
     }
 
-    def notify(def request, def response, def exception) {
+    def notify(def request, def exception) {
 
       def client = getConfiguredClient(request.requestURI) 
 
@@ -63,7 +63,6 @@ class BugsnagService {
       // get the session
       // get the request uri
       // get the forward uri
-      // get the response code
       // get the request cookies
 
       try{
