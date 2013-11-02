@@ -1,4 +1,23 @@
-class GrailsBugsnagPluginGrailsPlugin {
+/*
+* Copyright 2013 the original author or authors.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+*  Ben Lucchesi
+*  ben@granicus.com or benlucchesi@gmail.com
+*/
+
+class BugsnagGrailsPlugin {
     // the plugin version
     def version = "0.1"
     // the version or versions of Grails the plugin is designed for
@@ -11,12 +30,15 @@ class GrailsBugsnagPluginGrailsPlugin {
     ]
 
     // TODO Fill in these fields
-    def title = "Grails Bugsnag Plugin Plugin" // Headline display name of the plugin
-    def author = "Your name"
-    def authorEmail = ""
+    def title = "Grails Bugsnag Plugin" // Headline display name of the plugin
+    def author = "Ben Lucchesi"
+    def authorEmail = "benlucchesi@gmail.com"
     def description = '''\
-Brief summary/description of the plugin.
+      Integrates the bugsnag error reporting client into your grails application and automatically reports exceptions to the bugsnag service.
 '''
+
+
+  def loadAfter = ['controllers']
 
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/grails-bugsnag-plugin"
@@ -24,7 +46,7 @@ Brief summary/description of the plugin.
     // Extra (optional) plugin metadata
 
     // License: one of 'APACHE', 'GPL2', 'GPL3'
-//    def license = "APACHE"
+    def license = "APACHE"
 
     // Details of company behind the plugin (if there is one)
 //    def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
@@ -33,17 +55,24 @@ Brief summary/description of the plugin.
 //    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
 
     // Location of the plugin's issue tracker.
-//    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
+    def issueManagement = [ system: "GIT", url: "https://github.com/benlucchesi/grails-bugsnag-plugin" ]
 
     // Online location of the plugin's browseable source code.
-//    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
+    def scm = [ url: "https://github.com/benlucchesi/grails-bugsnag-plugin" ]
 
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before
     }
 
     def doWithSpring = {
-        // TODO Implement runtime spring config (optional)
+
+        if ( !application.config.grails.plugin.bugsnag.enabled ) 
+            return
+
+        exceptionHandler(com.granicus.grails.plugins.bugsnag.BugsnagExceptionResolver){ bean ->
+          bean.autowire = 'byName'
+          exceptionMappings = ['java.lang.Exception': '/error']
+        }
     }
 
     def doWithDynamicMethods = { ctx ->
