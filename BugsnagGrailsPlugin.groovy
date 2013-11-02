@@ -37,7 +37,8 @@ class BugsnagGrailsPlugin {
       Integrates the bugsnag error reporting client into your grails application and automatically reports exceptions to the bugsnag service.
 '''
 
-    def loadAfter = ['services']
+
+  def loadAfter = ['controllers']
 
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/grails-bugsnag-plugin"
@@ -68,9 +69,9 @@ class BugsnagGrailsPlugin {
         if ( !application.config.grails.plugin.bugsnag.enabled ) 
             return
 
-        exceptionHandler(com.granicus.grails.plugins.bugsnag.BugsnagExceptionResolver){
+        exceptionHandler(com.granicus.grails.plugins.bugsnag.BugsnagExceptionResolver){ bean ->
+          bean.autowire = 'byName'
           exceptionMappings = ['java.lang.Exception': '/error']
-          bugsnagService = ref('bugsnagService')
         }
     }
 

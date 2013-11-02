@@ -7,12 +7,14 @@ import org.codehaus.groovy.grails.web.errors.GrailsWrappedRuntimeException
 import org.springframework.beans.factory.InitializingBean
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as ch
 import org.codehaus.groovy.grails.web.context.ServletContextHolder as SCH
+import org.codehaus.groovy.grails.web.errors.ErrorsViewStackTracePrinter
 import grails.util.Environment
 
 class BugsnagService {
 
     def grailsApplication
     def exceptionHandler
+    def grailsResourceLocator
 
     def getConfiguredClient(def context){
 

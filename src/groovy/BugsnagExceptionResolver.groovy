@@ -19,7 +19,7 @@ class BugsnagExceptionResolver extends GrailsExceptionResolver {
     try{
       if( bugsnagService ){
         log.trace "calling notify on bugsnagService"
-        bugsnagService.notify( request, this.getRootCause(ex) )
+        bugsnagService.notify( request, ex )
       }
       else{
         log.error "bugsnagService is null"
