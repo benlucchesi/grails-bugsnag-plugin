@@ -6,11 +6,13 @@ The bugsnag grails plugin integrates the bugsnag client into a grails applicatio
 
 ## Installation
 
-compile ":bugsnag:0.1"
+compile ":bugsnag:0.2"
 
 # Version History
-  0.2 - added metadata configuration
-  0.1 - first release
+  <ul>
+    <li>0.2 - added metadata configuration</li>
+    <li>0.1 - first release</li>
+  </ul>
 
 ## Usage
 
