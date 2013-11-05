@@ -10,7 +10,7 @@ compile ":bugsnag:0.2"
 
 # Version History
   <ul>
-    <li>0.2 - added metadata configuration</li>
+    <li>0.2 - added metadata customization, added session dump to report</li>
     <li>0.1 - first release</li>
   </ul>
 
@@ -71,7 +71,7 @@ Gets a fully configured bugsnagClient object.
 context: string used to describe where the exception occurred.
       </td>
       <td>
-com.bugsnag.Client object (see https://bugsnag.com/docs/notifiers/java)
+com.bugsnag.Client object
       </td>
     </tr>
     <tr>
