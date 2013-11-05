@@ -114,7 +114,7 @@ The bugsnagService has the ability to add user-defined metaData to reports. To u
 
     def init = { servletContext ->
       bugsnagService.addMetadata = { metaData ->
-        // do and inspection of the current application state
+        // do an inspection of the current application state
         def customfield1 = "" // assign meaningful value
         def customfield2 = "" // assign meaningful value
         
@@ -125,7 +125,7 @@ The bugsnagService has the ability to add user-defined metaData to reports. To u
     }
 
 ## Implementation Notes
-The plugin works by injecting a customized GrailsExceptionResolver which intercepts resolveException and reports them bugsnag before calling the superclass.
+The plugin works by injecting a customized GrailsExceptionResolver into the application context (replacing the default object) which intercepts resolveException and reports using the bugsnagService before calling the superclass.
 
 ## Notes
 future versions will include the ability to customize the messages sent to bugsnag to include user defined code.
