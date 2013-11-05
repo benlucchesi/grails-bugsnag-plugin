@@ -19,9 +19,10 @@ compile ":bugsnag:0.2"
 Simply enabling the bugsnag plugin automatically configures error reporting capabilities. All uncaught exceptions will be reported to bugsnag.
 
 ### Example 
-Config.groovy
-    grails.plugin.bugsnag.enabled = true
-    grails.plugin.bugsnag.apikey = "<bugsnag API key>"
+      Config.groovy
+
+      grails.plugin.bugsnag.enabled = true
+      grails.plugin.bugsnag.apikey = "<bugsnag API key>"
 
 ### Configuration Parameters
 
