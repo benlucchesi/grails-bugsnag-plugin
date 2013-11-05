@@ -1,29 +1,30 @@
 # Bugsnag Grails Plugin
 
-Current Version: 0.1
+Current Version: 0.2
 
-The bugsnag Grails plugin integrates the bugsnag reporting client into your Grails applications and automatically reports errors to the bugsnag service (www.bugsnag.com). Information reported by the client includes a dump of the original request (headers, cookies, query, original URL, Grails environment, etc), information about the currently logged in user, and a stacktrace of the error that occurred.
+The bugsnag grails plugin integrates the bugsnag client into a grails application and automatically reports errors to the bugsnag service (www.bugsnag.com). Information reported includes a dump of the original request (headers, cookies, query string, original URL, grails environment, etc), the currently logged in user, and a stacktrace of the exception.
 
-# Installation
+## Installation
 
-compile ":bugsnag:0.1"
+compile ":bugsnag:0.2"
 
-# Usage
+## Version History
+  <ul>
+    <li>0.2 - added metadata customization callback to bugsnagService, added optional extra data map to bugsnagService.notify, added session dump to report</li>
+    <li>0.1 - first release</li>
+  </ul>
 
-Simply enabling bugsnag enables error reporting capabilities. All uncaught exceptions will be reported to bugsnag. Additionally, you can use the bugsnagService directly to send notifications to bugsnag.
+## Usage
 
-To use the bugsnagService, add it to your services or controllers as follows:
+Simply enabling the bugsnag plugin automatically configures error reporting capabilities. All uncaught exceptions will be reported to bugsnag.
 
-  def bugsnagService
+### Example 
+Config.groovy
+    grails.plugin.bugsnag.enabled = true
+    grails.plugin.bugsnag.apikey = "<bugsnag API key>"
 
-Bugsnag service has two methods:
+### Configuration Parameters
 
-    def getConfiguredClient(context) : return a configured bugsnag client (https://bugsnag.com/docs/notifiers/java)
-    def notify(request, exception) : send a notification to bugsnag, passing in the current request
-
-# Configuration
-
-## Parameters
 <table>
   <thead>
     <tr>
@@ -45,9 +46,99 @@ Bugsnag service has two methods:
   </tbody>
 </table>
 
+In addition to automatic error reporting, the bugsnag plugin implements bugsnagService which can be used directly in your application to send notifications. The following is an example of how to use bugsnagService to report caught exceptions.
+     
+      // in a controller class
+      def bugsnagService  // autowired
 
-# Implementation Notes
-The plugin works by injecting a customized GrailsExceptionResolver which intercepts resolveException and reports them bugsnag before calling the superclass.
+      // somewhere in a method
+      def index() {
+        try{
+          // something breaks
+        }
+        catch( excp ){
+          // handle exception
 
-# Notes
+          def mapOfExtraMetaData = [:] // 
+          bugsnagService.notify(request,excp,mapOfExtraMetadData) // assumes you're calling from a controller where the request object is in scope
+        }
+
+        //... render something eventually
+      }
+
+### bugsnagService API
+
+<table>
+  <thead>
+    <th>method name</th>
+    <th>description</th>
+    <th>parameters</th>
+    <th>returns</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+getConfiguredClient
+      </td>
+      <td>
+Gets a fully configured Client object.
+      </td>
+      <td>
+<ul>
+<li>context - string used to describe where the exception occurred.</li>
+</ul>
+      </td>
+      <td>
+com.bugsnag.Client object
+      </td>
+    </tr>
+    <tr>
+      <td>
+notify
+      </td>
+      <td>
+sends a configured notification to bugsnag.
+      </td>
+      <td>
+        <ul>
+          <li>
+            request - HttpServletRequest
+          </li>
+          <li>
+            exception - java.lang.Exception
+          </li>
+          <li>
+            extraData - (version 0.2+, optional) map of data to include in exception report
+          </li>
+        </ul>
+      </td>
+      <td>
+nothing
+      </td>   
+    </tr>
+  </tbody>
+</table>
+
+### version 0.2+
+The bugsnagService has the ability to add user-defined metaData to reports. To use this feature, add the bugsnagService to BootStrap.groovy and assign a closure to the addMetadata property. In the closure, add code that assigns values to the provided metaData class instance. The addMetadata closure will be called everytime is notification is sent bugsnag.
+
+#### example BootStrap.groovy
+    def bugsnagService
+
+    def init = { servletContext ->
+      bugsnagService.addMetadata = { metaData ->
+        // do an inspection of the current application state
+        def customfield1 = "" // assign meaningful value
+        def customfield2 = "" // assign meaningful value
+        
+        // add the values to the metadata
+        metaData.addToTab( "custom", "customfield1", customfield1 )
+        metaData.addToTab( "custom", "customfield2", customfield2 )
+      }
+    }
+
+## Implementation Notes
+The plugin works by injecting a customized GrailsExceptionResolver into the application context (replacing the default object) which intercepts resolveException and reports using the bugsnagService before calling the superclass.
+
+## Notes
 future versions will include the ability to customize the messages sent to bugsnag to include user defined code.

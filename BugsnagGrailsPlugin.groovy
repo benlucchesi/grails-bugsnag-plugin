@@ -20,13 +20,13 @@
 import com.granicus.grails.plugins.bugsnag.BugsnagExceptionResolver
 
 class BugsnagGrailsPlugin {
-    def version = "0.1"
+    def version = "0.2"
     def grailsVersion = "2.0 > *"
     def title = "Grails Bugsnag Plugin"
     def author = "Ben Lucchesi"
     def authorEmail = "benlucchesi@gmail.com"
     def description = 'Integrates the bugsnag error reporting client and automatically reports exceptions to the bugsnag service.'
-    def documentation = "http://grails.org/plugin/grails-bugsnag-plugin"
+    def documentation = "http://grails.org/plugin/bugsnag"
 
     def loadAfter = ['controllers']
 

@@ -5,11 +5,15 @@ import grails.util.Environment
 import com.bugsnag.Client
 import com.bugsnag.MetaData
 
+import org.codehaus.groovy.grails.web.context.ServletContextHolder as SCH
+
 class BugsnagService {
 
     def grailsApplication
     def exceptionHandler
     def grailsResourceLocator
+
+    def addMetadata = null
 
     def getConfiguredClient(context){
 
@@ -49,24 +53,23 @@ class BugsnagService {
       return client
     }
 
-    def notify(request, exception) {
+    def notify(request, exception, extraMetaData = [:]) {
 
         def client = getConfiguredClient(request.requestURI)
-
-        // get the current user
-        // get the session
-        // get the request uri
-        // get the forward uri
-        // get the request cookies
 
         try{
             client.setUserId(request.remoteUser)
             MetaData metaData = new MetaData()
 
-            metaData.addToTab( "app", "grails version", grailsApplication.metadata.getGrailsVersion() )
             metaData.addToTab( "app", "application name", grailsApplication.metadata.getApplicationName() )
 
-            println "User principal: ${request.userPrincipal}"
+            metaData.addToTab( "environment", "grails version", grailsApplication.metadata.getGrailsVersion() )
+            metaData.addToTab( "environment", "java version", System.getProperty("java.version") )
+            metaData.addToTab( "environment", "java vendor", System.getProperty("java.vendor") )
+            metaData.addToTab( "environment", "os name", System.getProperty("os.name") )
+            metaData.addToTab( "environment", "os version", System.getProperty("os.version") )
+            metaData.addToTab( "environment", "servlet", SCH.servletContext.serverInfo )
+
             metaData.addToTab( "user", "remoteUser", request.remoteUser?:"(none)" )
             metaData.addToTab( "user", "userPrincipal", request.userPrincipal?:"(none)" )
 
@@ -82,11 +85,24 @@ class BugsnagService {
             metaData.addToTab( "request", "character encoding", request.characterEncoding?:"(none)" )
             metaData.addToTab( "request", "scheme", request.scheme?:"(none)" )
             metaData.addToTab( "request", "queryString", request.queryString?:"(none)" )
+            metaData.addToTab( "request", "session", request.getSession(false)?.toString() )
 
             metaData.addToTab( "request", "xml", request.xml?.text() )
             metaData.addToTab( "request", "json", request.json?.text() )
 
+            extraMetaData.each{ k, v -> 
+              metaData.addToTab( "extra", k, v )
+            }
+
             //TODO: get handler for including user defined metadata
+            if( addMetadata instanceof groovy.lang.Closure ){
+              try{
+                addMetadata(metaData)
+              }
+              catch( excp ){
+                log.error "error calling 'addMetadata' closure.", excp
+              }
+            }
 
             client.notify(exception,metaData)
 
