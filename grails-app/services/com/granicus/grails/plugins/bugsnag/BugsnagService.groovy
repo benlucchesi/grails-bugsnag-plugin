@@ -15,7 +15,7 @@ class BugsnagService {
 
     def addMetadata = null
 
-    def getConfiguredClient(def context){
+    def getConfiguredClient(context){
 
         log.info "getConfiguredClient()"
 
@@ -53,7 +53,7 @@ class BugsnagService {
       return client
     }
 
-    def notify(request, exception) {
+    def notify(request, exception, extraMetaData = [:]) {
 
         def client = getConfiguredClient(request.requestURI)
 
@@ -89,6 +89,10 @@ class BugsnagService {
 
             metaData.addToTab( "request", "xml", request.xml?.text() )
             metaData.addToTab( "request", "json", request.json?.text() )
+
+            extraMetaData.each{ k, v -> 
+              metaData.addToTab( "extra", k, v )
+            }
 
             //TODO: get handler for including user defined metadata
             if( addMetadata instanceof groovy.lang.Closure ){
