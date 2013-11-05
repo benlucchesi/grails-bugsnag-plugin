@@ -98,31 +98,31 @@ nothing
 
 The bugsnagService.notify method is used by the plugin to report uncaught exceptions. This method can also be used to send notifications from exception handlers.
 
-    try{
-      // something breaks
-    }
-    catch( excp ){
-      // handle exception
-      bugsnagService.notify(request,excp) // assumes you're calling from a controller and that the request object is in scope
-    }
+      try{
+        // something breaks
+      }
+      catch( excp ){
+        // handle exception
+        bugsnagService.notify(request,excp) // assumes you're calling from a controller and that the request object is in scope
+      }
 
 ### version 0.2+
 The bugsnagService has the ability to add user-defined metaData to reports. To use this feature, add the bugsnagService to BootStrap.groovy and assign a closure to the addMetadata property. In the closure, add code that assigns values to the provided metaData class instance. The addMetadata closure will be called everytime is notification is sent bugsnag.
 
 #### example BootStrap.groovy
-  def bugsnagService
+    def bugsnagService
 
-  def init = { servletContext ->
-    bugsnagService.addMetadata = { metaData ->
-      // do and inspection of the current application state
-      def customfield1 = "" // assign meaningful value
-      def customfield2 = "" // assign meaningful value
+    def init = { servletContext ->
+      bugsnagService.addMetadata = { metaData ->
+        // do and inspection of the current application state
+        def customfield1 = "" // assign meaningful value
+        def customfield2 = "" // assign meaningful value
         
-      // add the values to the metadata
-      metaData.addToTab( "custom", "customfield1", customfield1 )
-      metaData.addToTab( "custom", "customfield2", customfield2 )
+        // add the values to the metadata
+        metaData.addToTab( "custom", "customfield1", customfield1 )
+        metaData.addToTab( "custom", "customfield2", customfield2 )
+      }
     }
-  }
 
 ## Implementation Notes
 The plugin works by injecting a customized GrailsExceptionResolver which intercepts resolveException and reports them bugsnag before calling the superclass.
