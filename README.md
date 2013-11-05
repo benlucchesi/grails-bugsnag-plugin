@@ -65,10 +65,12 @@ The bugsnagService exposes two methods:
 getConfiguredClient
       </td>
       <td>
-Gets a fully configured bugsnagClient object.
+Gets a fully configured Client object.
       </td>
       <td>
-context: string used to describe where the exception occurred.
+<ul>
+<li>context - string used to describe where the exception occurred.</li>
+</ul>
       </td>
       <td>
 com.bugsnag.Client object
