@@ -41,7 +41,7 @@ class BugsnagService {
         
         // configure the release notify stages
         if( conf.containsKey('notifyreleasestages') ){
-            client.setNotifyReleaseStages( conf.notifyreleasestages )
+            client.setNotifyReleaseStages( conf.notifyreleasestages.toArray() )
         }
         
         // configure the context of the client
