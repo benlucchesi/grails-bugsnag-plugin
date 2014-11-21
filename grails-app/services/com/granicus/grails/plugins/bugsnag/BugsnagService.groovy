@@ -32,12 +32,20 @@ class BugsnagService {
             log.error "grails.plugin.bugsnag.apikey not configured. assign your bugsnag api key with this configuration value."
             return null
         }
+        
+        if( !conf.containsKey('notifyreleasestages') ){
+            log.error "grails.plugin.bugsnag.notifyreleasestages not configured"
+            return null
+        }
 
         // create the bugsnag client
         def client = new Client( conf.apikey )
 
         // configure the release stage or set it to the current environment name
         client.setReleaseStage( conf.releasestage ?: Environment.current.name)
+        
+        // configure the release notify stages
+        client.setNotifyReleaseStages( conf.releasestage ?: new String[]{"production"})
 
         // configure the context of the client
         if( context ){
