@@ -12,7 +12,7 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-        compile 'com.bugsnag:bugsnag:1.1.0'
+        compile 'com.bugsnag:bugsnag:1.2.8'
     }
 
     plugins {
