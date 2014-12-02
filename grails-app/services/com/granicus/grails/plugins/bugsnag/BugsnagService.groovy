@@ -38,7 +38,12 @@ class BugsnagService {
 
         // configure the release stage or set it to the current environment name
         client.setReleaseStage( conf.releasestage ?: Environment.current.name)
-
+        
+        // configure the release notify stages
+        if( conf.containsKey('notifyreleasestages') ){
+            client.setNotifyReleaseStages( conf.notifyreleasestages )
+        }
+        
         // configure the context of the client
         if( context ){
             client.setContext( context )
