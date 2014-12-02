@@ -1,15 +1,16 @@
 # Bugsnag Grails Plugin
 
-Current Version: 0.2
+Current Version: 0.3
 
 The bugsnag grails plugin integrates the bugsnag client into a grails application and automatically reports errors to the bugsnag service (www.bugsnag.com). Information reported includes a dump of the original request (headers, cookies, query string, original URL, grails environment, etc), the currently logged in user, and a stacktrace of the exception.
 
 ## Installation
 
-compile ":bugsnag:0.2"
+compile ":bugsnag:0.3"
 
 ## Version History
   <ul>
+    <li>0.3 - added support for 'notifyreleasestages' configuration option. updated to latest bugsnag java client (1.2.8)</li>
     <li>0.2 - added metadata customization callback to bugsnagService, added optional extra data map to bugsnagService.notify, added session dump to report</li>
     <li>0.1 - first release</li>
   </ul>
